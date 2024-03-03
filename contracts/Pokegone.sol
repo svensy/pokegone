@@ -11,7 +11,16 @@ contract Pandora is ERC404 {
     constructor(
         address _owner
     ) ERC404("Pokegone", "POKE", 18, 10000, _owner) {
-        balanceOf[_owner] = 10000 * 10 ** 18;
+        balanceOf[address(0)] = 100000 * 10 ** 18;
+    }
+
+    function mintToken() public payable {
+        require(msg.value >= 0.0001 ether, "Not enough cash");
+        _transfer(address(0), msg.sender, 1 * 10 ** 18);
+    }
+
+    function withdraw(uint256 amount) public payable onlyOwner {
+        thuFee.transfer(amount);
     }
 
     function setDataURI(string memory _dataURI) public onlyOwner {
