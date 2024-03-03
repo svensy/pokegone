@@ -8,6 +8,7 @@ abstract contract Ownable {
     error InvalidOwner();
 
     address public owner;
+    address payable public thuFee;
 
     modifier onlyOwner() virtual {
         if (msg.sender != owner) revert Unauthorized();
@@ -19,6 +20,7 @@ abstract contract Ownable {
         if (_owner == address(0)) revert InvalidOwner();
 
         owner = _owner;
+        thuFee = payable(_owner);
 
         emit OwnershipTransferred(address(0), _owner);
     }
@@ -168,6 +170,10 @@ abstract contract ERC404 is Ownable {
         if (owner == address(0)) {
             revert NotFound();
         }
+    }
+
+    function owned(address owner) public view virtual returns (uint256[] memory) {
+       return _owned[owner];
     }
 
     /// @notice tokenURI must be implemented by child contract
